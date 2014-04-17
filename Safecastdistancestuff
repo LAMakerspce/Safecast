@@ -1,0 +1,14 @@
+print "Safecast data"
+import csv
+import haversine
+inf = csv.reader(open('Safecast.csv'))
+i = 0
+for row in inf:
+	i = i+1 
+	
+	if i > 1:
+		reactor = [37.42237, 141.03292]
+		latitude = float(row[2])
+		longitude = float(row[3])
+		secondary = [latitude, longitude]
+		print haversine.distance(reactor, secondary)
