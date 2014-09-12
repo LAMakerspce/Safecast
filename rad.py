@@ -40,6 +40,15 @@ for row in input_file:
 	rad=float(row["Value"])
 	dateList.append(date)
 	radList.append(rad)
+#This loop readings in all of the dates and radiation readings into two lists.
+
+
+fileWriter = open('radAnalysis.csv','wb')
+wr = csv.writer(fileWriter)
+label = ["date","Average radiation (cpm)","STDEV on radiation (cpm)"]
+wr.writerow(label)
+#Open up an output file for the average and standard deviation on radiation value in an area.
+
 for i in range(0, len(dateList)):
 	j=dateList.count(dateList[i])
 	if dateList[i]!=dateList[i-1]:
@@ -49,7 +58,12 @@ for i in range(0, len(dateList)):
 		for k in range(i, i+j):
 			radDiff=radDiff+(radList[k]-radAve)**2
 		radStDev = (radDiff/(j-1))**0.5
-		print dateList[i], radAve, radStDev
+		formattedDate = "/".join((dateList[i][5:7],dateList[i][8:10],dateList[i][:4]))
+		data=formattedDate,radAve, radStDev
+		wr.writerow(data)
 		radSum=0
 		radDiff=0
 		radStDev=0
+#This loop finds the average and standard deviation of the radiation readings within a selection area.
+#This loop calculates the averages by day for a given area.
+#The formattedDate is just to convert the input date into mm/dd/yyyy format.
