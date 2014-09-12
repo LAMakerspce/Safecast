@@ -12,11 +12,29 @@ input_file = csv.DictReader(open("measurements.csv"))
 i=0
 j=0
 k=0
+#i,j,k are indices
+
 radAve=0
+#average radiation value for a given day
+
 rad=0
+#radiation reading in cpm at a given GPS coordinate
+
 radSum=0
+#sum of the radiation readings within a selection area
+
+radDiff=0
+#difference between radiation readings and the mean for a day and selection area
+
+radStDev=0
+#standard deviation on the mean for radiation readings
+
 dateList=[]
+#list which stores the dates from the download file
+
 radList=[]
+#list which stores the radiation readings from the download file
+
 for row in input_file:
 	date=row["Captured Time"][:10]
 	rad=float(row["Value"])
@@ -27,6 +45,11 @@ for i in range(0, len(dateList)):
 	if dateList[i]!=dateList[i-1]:
 		for k in range(i, i+j):
 			radSum=radSum+radList[k]
-		radSum=radSum/j
-		print j, radSum
+		radAve=radSum/j
+		for k in range(i, i+j):
+			radDiff=radDiff+(radList[k]-radAve)**2
+		radStDev = (radDiff/(j-1))**0.5
+		print j, radAve, radStDev
 		radSum=0
+		radDiff=0
+		radStDev=0
