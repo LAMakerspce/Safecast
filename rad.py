@@ -49,7 +49,7 @@ for i in range(0, len(dateList)):
 		for k in range(i, i+j):
 			radDiff=radDiff+(radList[k]-radAve)**2
 		radStDev = (radDiff/(j-1))**0.5
-		print j, radAve, radStDev
+		print dateList[i], radAve, radStDev
 		radSum=0
 		radDiff=0
 		radStDev=0
