@@ -6,6 +6,8 @@
 #5. Assume an exponential decay in radioactivity to interpolate Safecast readings at the times and places of your measurements.
 
 import csv
+import time
+import datetime
 
 input_file = csv.DictReader(open("measurements.csv"))
 
@@ -45,7 +47,7 @@ for row in input_file:
 
 fileWriter = open('radAnalysis.csv','wb')
 wr = csv.writer(fileWriter)
-label = ["date","Average radiation (cpm)","STDEV on radiation (cpm)"]
+label = ["date","Unix clock(s)","Average radiation (cpm)","STDEV on radiation (cpm)"]
 wr.writerow(label)
 #Open up an output file for the average and standard deviation on radiation value in an area.
 
@@ -59,7 +61,8 @@ for i in range(0, len(dateList)):
 			radDiff=radDiff+(radList[k]-radAve)**2
 		radStDev = (radDiff/(j-1))**0.5
 		formattedDate = "/".join((dateList[i][5:7],dateList[i][8:10],dateList[i][:4]))
-		data=formattedDate,radAve, radStDev
+		clock=time.mktime(datetime.datetime.strptime(formattedDate, "%m/%d/%Y").timetuple())
+		data=formattedDate,clock,radAve, radStDev
 		wr.writerow(data)
 		radSum=0
 		radDiff=0
