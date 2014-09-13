@@ -81,6 +81,18 @@ for i in range(0, len(dateList)):
 x=numpy.array(unixClock)
 y=numpy.array(radReadings)
 coefficients=numpy.polyfit(x,y,1)
-print coefficients
+print coefficients[0],coefficients[1]
 #Fit a linear function to the natural log of radioactivity versus time.
 #This can then be used to interpolate average radioactivity for the selection area for a given date.
+
+census_file = csv.DictReader(open("FukushimaCensus.csv"))
+id=int(raw_input('Enter site ID'))
+for row in census_file:
+	site=int(row["ID"])
+	
+	if site==id:
+		t=float(row["Unix Clock (s)"])
+		radInterpolated=math.exp(coefficients[0]*t+coefficients[1])
+		print site,row["Day"],row["Year"][:3],"20%s"%row["Year"][4:],t,radInterpolated
+#This loop opens up a list of sites around which selection area are taken.
+#Interpolated values are calculated from the different times at which a site has data.
