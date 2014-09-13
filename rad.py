@@ -6,8 +6,10 @@
 #5. Assume an exponential decay in radioactivity to interpolate Safecast readings at the times and places of your measurements.
 
 import csv
+import math
 import time
 import datetime
+import numpy
 
 input_file = csv.DictReader(open("measurements.csv"))
 
@@ -44,12 +46,15 @@ for row in input_file:
 	radList.append(rad)
 #This loop readings in all of the dates and radiation readings into two lists.
 
-
 fileWriter = open('radAnalysis.csv','wb')
 wr = csv.writer(fileWriter)
 label = ["date","Unix clock(s)","Average radiation (cpm)","STDEV on radiation (cpm)"]
 wr.writerow(label)
 #Open up an output file for the average and standard deviation on radiation value in an area.
+
+unixClock=[]
+radReadings=[]
+#Initializing x (unixClock) and y (radReadings) for fitting an exponential decay curve to the fallout data.
 
 for i in range(0, len(dateList)):
 	j=dateList.count(dateList[i])
@@ -64,9 +69,18 @@ for i in range(0, len(dateList)):
 		clock=time.mktime(datetime.datetime.strptime(formattedDate, "%m/%d/%Y").timetuple())
 		data=formattedDate,clock,radAve, radStDev
 		wr.writerow(data)
+		unixClock.append(clock)
+		radReadings.append(math.log(radAve))
 		radSum=0
 		radDiff=0
 		radStDev=0
 #This loop finds the average and standard deviation of the radiation readings within a selection area.
 #This loop calculates the averages by day for a given area.
 #The formattedDate is just to convert the input date into mm/dd/yyyy format.
+
+x=numpy.array(unixClock)
+y=numpy.array(radReadings)
+coefficients=numpy.polyfit(x,y,1)
+print coefficients
+#Fit a linear function to the natural log of radioactivity versus time.
+#This can then be used to interpolate average radioactivity for the selection area for a given date.
