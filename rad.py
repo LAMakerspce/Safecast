@@ -114,7 +114,8 @@ for i in range(0, len(dateList)):
 		radAve=radSum/j
 		for k in range(i, i+j):
 			radDiff=radDiff+(radList[k]-radAve)**2
-		radStDev = (radDiff/(j-1))**0.5
+		if j>1: radStDev = (radDiff/(j-1))**0.5
+		else: radStDev=0
 		formattedDate = "/".join((dateList[i][5:7],dateList[i][8:10],dateList[i][:4]))
 		clock=time.mktime(datetime.datetime.strptime(formattedDate, "%m/%d/%Y").timetuple())
 		data=formattedDate,clock,radAve, radStDev
