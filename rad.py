@@ -1,9 +1,5 @@
-#How to calculate and interpolate daily averages for a given location using Safecast data
-#1. Query the Safecast API
-#2. Use a set of GPS coordinates and select Safecast measurements within 100m of that location.
-#3. Append the string &format=csv&options=with-headings to the end of the url after performing the query in order to download the data in csv format.
-#4. Calculate the average and standard deviation on the measurements per selection area per day.
-#5. Assume an exponential decay in radioactivity to interpolate Safecast readings at the times and places of your measurements.
+#This script calculates daily averages for a given location using Safecast data, then interpolates new daily values from that set.
+#Please make sure that all the files involved with this script live in the same directory as the script.
 
 import csv
 import math
